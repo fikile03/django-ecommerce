@@ -4,7 +4,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 from django.contrib.auth.forms import AuthenticationForm
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.core.mail import EmailMessage
 from django.db import transaction
 
@@ -134,7 +134,7 @@ def edit_store(request, store_id):
     if not request.user.groups.filter(name="Vendor").exists():
         return redirect("home")
 
-    store = Store.objects.get(id=store_id)
+    store = get_object_or_404(Store, id=store_id)
 
     if store.vendor != request.user:
         return redirect("store_list")
@@ -158,7 +158,7 @@ def delete_store(request, store_id):
     if not request.user.groups.filter(name="Vendor").exists():
         return redirect("home")
 
-    store = Store.objects.get(id=store_id)
+    store = get_object_or_404(Store, id=store_id)
 
     if store.vendor != request.user:
         return redirect("store_list")
@@ -177,7 +177,7 @@ def create_product(request, store_id):
     if not request.user.groups.filter(name="Vendor").exists():
         return redirect("home")
 
-    store = Store.objects.get(id=store_id)
+    store = get_object_or_404(Store, id=store_id)
 
     if store.vendor != request.user:
         return redirect("store_list")
@@ -204,7 +204,7 @@ def product_list(request, store_id):
     if not request.user.groups.filter(name="Vendor").exists():
         return redirect("home")
 
-    store = Store.objects.get(id=store_id)
+    store = get_object_or_404(Store, id=store_id)
 
     if store.vendor != request.user:
         return redirect("store_list")
@@ -223,7 +223,7 @@ def edit_product(request, product_id):
     if not request.user.groups.filter(name="Vendor").exists():
         return redirect("home")
 
-    product = Product.objects.get(id=product_id)
+    product = get_object_or_404(Product, id=product_id)
 
     if product.store.vendor != request.user:
         return redirect("store_list")
@@ -323,7 +323,7 @@ def cart(request):
 def add_to_cart(request, product_id):
     """Add a selected product to the user's shopping cart."""
 
-    product = Product.objects.get(id=product_id)
+    product = get_object_or_404(Product, id=product_id)
 
     cart = request.session.get("cart", {})
 
@@ -375,7 +375,7 @@ def order_history(request):
 def order_detail(request, order_id):
     """Display the details of an order belonging to the logged-in buyer."""
 
-    order = Order.objects.get(id=order_id)
+    order = get_object_or_404(Order, id=order_id)
 
     if order.buyer != request.user:
         return redirect("home")
@@ -505,7 +505,7 @@ def order_success(request):
 def add_review(request, product_id):
     """Allow a user to submit a review for a product they purchased."""
 
-    product = Product.objects.get(id=product_id)
+    product = get_object_or_404(Product, id=product_id)
 
     if request.method == "POST":
         form = ReviewForm(request.POST)
