@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Order History</title>
+</head>
+
+<body>
+
+    <h1>My Orders</h1>
+
+    {% if orders %}
+    {% for order in orders %}
+    <div>
+        <h2>Order #{{ order.id }}</h2>
+
+        <p>Date: {{ order.created_at }}</p>
+
+        <p>Total: R{{ order.total_amount }}</p>
+
+        <p>Status: {{ order.status }}</p>
+
+        <a href="{% url 'order_detail' order.id %}">
+            View Order
+        </a>
+    </div>
+
+    <hr>
+    {% endfor %}
+    {% else %}
+    <p>You have not placed any orders yet.</p>
+    {% endif %}
+
+    <p>
+        <a href="{% url 'product_catalogue' %}">Continue Shopping</a>
+    </p>
+
+</body>
+
+</html>

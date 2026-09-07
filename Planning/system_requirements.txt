@@ -1,0 +1,134 @@
+eCommerce Application – System Requirements
+
+1. System Overview
+
+The system will be a Django-based eCommerce web application where users 
+can register as either buyers or vendors. Vendors will be able to create
+stores and manage the products they sell, while buyers will be able to 
+browse products, add products to a shopping cart, checkout, and leave reviews.
+
+The application will use authentication and permissions to ensure that 
+users can only access features appropriate to their role.
+
+2. Users of the System
+
+Buyer:
+
+A buyer is a registered user who purchases products from vendors.
+
+A buyer should be able to:
+
+* Register for an account as a buyer.
+* Log in and log out securely.
+* Browse stores and products.
+* View product information.
+* Add products to a shopping cart.
+* View, update, and remove items from their cart.
+* Have their cart maintained using sessions while browsing.
+* Checkout and purchase products.
+* Receive an invoice by email after checkout.
+* Leave reviews for products.
+* Have reviews identified as verified when the buyer has purchased the product.
+* Leave unverified reviews for products they have not purchased.
+* Recover a forgotten password and reset it using an expiring password-reset link.
+
+Vendor:
+
+A vendor is a registered user who sells products through the application.
+
+A vendor should be able to:
+
+* Register for an account as a vendor.
+* Log in and log out securely.
+* Create a store.
+* View their stores.
+* Edit their stores.
+* Remove their stores.
+* Add products to their stores.
+* View their products.
+* Edit their products.
+* Remove their products.
+* Only manage stores and products that belong to them.
+
+3. Authentication and Security Requirements
+
+The system should:
+
+* Require users to authenticate before accessing protected functionality.
+* Use Django authentication to manage user accounts and login sessions.
+* Use permissions to control access to vendor and buyer functionality.
+* Prevent users from accessing or modifying another users stores, products,
+  carts, or order information.
+* Secure password-reset functionality using temporary tokens and expiring reset URLs.
+* Protect sensitive user and database information from unauthorized access.
+
+4. Database Requirements
+
+The application will use MariaDB or another relational database management 
+system as its database backend.
+
+The database should store information such as:
+
+* User accounts and roles.
+* Stores.
+* Products.
+* Orders and purchased items.
+* Reviews.
+* Other information required to support the application.
+
+Django migrations will be used to create and update the database structure.
+
+5. Shopping Cart Requirements
+
+The shopping cart should:
+
+* Be available to buyers while browsing products.
+* Use Django sessions to keep track of the buyers cart.
+* Allow products to be added and removed.
+* Allow quantities to be updated.
+* Display the items and quantities currently in the cart.
+* Clear the purchased products from the cart after successful checkout.
+
+6. Checkout and Invoice Requirements
+
+When a buyer checks out:
+
+1. The system should process the items in the buyers cart.
+2. The purchase should be recorded.
+3. An invoice containing the purchased items should be generated.
+4. The purchased products should be removed from the cart.
+5. The invoice should be sent to the buyers email address.
+
+7. Review Requirements
+
+The application should allow buyers to review products.
+
+Reviews should be classified as:
+
+* Verified: The buyer has previously purchased the product.
+* Unverified: The buyer has not purchased the product.
+
+The system should determine the review status based on the buyers purchase history.
+
+8. Password Recovery Requirements
+
+Users who forget their passwords should be able to request a password reset.
+
+The system should:
+
+* Allow the user to request a password reset.
+* Generate a secure reset token.
+* Send a password-reset URL to the users email address.
+* Make the reset URL expire after a limited period.
+* Allow the user to create a new password using the valid reset link.
+
+9. General System Requirements
+
+The application should:
+
+* Provide a clear and easy-to-use interface.
+* Validate user input.
+* Display useful error messages when an operation fails.
+* Protect against unauthorized actions.
+* Maintain data integrity when creating, updating, or deleting information.
+* Handle unexpected errors without exposing sensitive technical information to users.

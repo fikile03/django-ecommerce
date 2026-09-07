@@ -1,0 +1,114 @@
+body {
+    background-color: #f5f7fa;
+    color: #212529;
+    font-family: Arial, sans-serif;
+}
+
+/* Navigation */
+.navbar-brand {
+    letter-spacing: 0.5px;
+}
+
+.navbar {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* Main content */
+main {
+    min-height: 75vh;
+}
+
+/* Page headings */
+h1 {
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+}
+
+h2,
+h3 {
+    font-weight: 600;
+}
+
+/* Product cards */
+.product-card {
+    background: white;
+    border: none;
+    border-radius: 12px;
+    padding: 20px;
+    height: 100%;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+.product-card h2 {
+    margin-bottom: 10px;
+}
+
+/* Prices */
+.price {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+/* Buttons */
+.btn {
+    border-radius: 8px;
+}
+
+/* Forms */
+.form-container {
+    max-width: 550px;
+    margin: 0 auto;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+}
+
+.form-container label {
+    font-weight: 600;
+}
+
+/* Cart */
+.cart-item {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+/* Checkout */
+.checkout-box {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Reviews */
+.review {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+/* Success messages */
+.success-box {
+    background: white;
+    padding: 40px;
+    text-align: center;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Footer */
+footer {
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+}

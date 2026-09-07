@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Order Confirmation</title>
+</head>
+
+<body>
+
+    <h1>Order #{{ order.id }}</h1>
+
+    <p>Order placed successfully!</p>
+
+    <p>
+        Date: {{ order.created_at }}
+    </p>
+
+    {% for item in items %}
+    <h2>{{ item.product.name }}</h2>
+    <p>Quantity: {{ item.quantity }}</p>
+    <p>Price: R{{ item.price }}</p>
+    <hr>
+    {% endfor %}
+
+    <h2>Total: R{{ order.total_amount }}</h2>
+
+    <a href="{% url 'product_catalogue' %}">
+        Continue Shopping
+    </a>
+
+</body>
+
+</html>

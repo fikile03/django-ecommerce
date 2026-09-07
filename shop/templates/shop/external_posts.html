@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>External Posts</title>
+</head>
+
+<body>
+
+    <h1>External Posts</h1>
+
+    {% for post in posts %}
+    <div>
+        <h2>{{ post.title }}</h2>
+        <p>{{ post.body }}</p>
+        <p>User ID: {{ post.userId }}</p>
+    </div>
+
+    <hr>
+    {% empty %}
+    <p>No posts found.</p>
+    {% endfor %}
+
+</body>
+
+</html>

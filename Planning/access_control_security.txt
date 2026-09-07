@@ -1,0 +1,137 @@
+eCommerce Application – Access Control and Data Security Plan
+
+1. Authentication
+
+The application will use Django's built-in authentication system to 
+manage user accounts.
+
+Users will be required to log in before accessing functionality that 
+requires an authenticated account.
+
+The system will support two main user roles:
+
+* Buyer
+* Vendor
+
+Users who are not logged in will only have access to public areas such 
+as the home page and product/store browsing.
+
+2. Role-Based Access
+
+Access to features will depend on the user's role.
+
+Buyer Permissions
+
+Buyers will be able to:
+
+* View stores and products.
+* Manage their shopping cart.
+* Checkout.
+* View their own order information.
+* Leave product reviews.
+* Manage their own account and password.
+
+Buyers should not be able to create or manage vendor stores or modify products 
+belonging to vendors.
+
+Vendor Permissions
+
+Vendors will be able to:
+
+* Create stores.
+* View their own stores.
+* Edit their own stores.
+* Delete their own stores.
+* Add products to their stores.
+* Edit their own products.
+* Delete their own products.
+
+Vendors should not be able to modify stores or products belonging to other vendors.
+
+3. Protecting Views
+
+Views that contain sensitive or restricted functionality will require authentication.
+
+The application will use Django's authentication and authorization features 
+to prevent unauthorized users from accessing protected views.
+
+For example:
+
+* A logged-out user should not access checkout.
+* A buyer should not access vendor management pages.
+* A vendor should not modify another vendor's products.
+* A user should not access another user's private order information.
+
+4. Protecting Data
+
+The application should protect sensitive information by:
+
+* Using Django's password hashing rather than storing plain-text passwords.
+* Validating user input before saving it to the database.
+* Using Django's ORM to interact with the database.
+* Restricting access to database records based on the logged-in user's permissions.
+* Keeping secret configuration values such as database passwords and email credentials 
+  out of publicly accessible source code.
+* Using environment variables for sensitive configuration where appropriate.
+
+5. Session Security
+
+Django sessions will be used to maintain the buyer's shopping cart while browsing.
+
+Session data should not expose sensitive information unnecessarily.
+
+The application should use secure session settings when deployed, including 
+secure cookies and appropriate cookie protection settings.
+
+6. Password Security
+
+Passwords should be handled using Django's built-in authentication system.
+
+The application should:
+
+* Store passwords using secure password hashing.
+* Never display or store passwords as plain text.
+* Require appropriate password validation.
+* Provide a secure password-reset process.
+* Use temporary reset tokens or links that expire.
+
+7. Email Security
+
+Email functionality will be used for invoices and password-reset links.
+
+Email credentials must not be hard-coded into publicly available source code.
+
+During development, email settings can be configured using environment variables
+or a suitable development email backend.
+
+8. Database Security
+
+The MariaDB database should be protected using:
+
+* Strong database credentials.
+* Restricted database access.
+* Appropriate user permissions.
+* Secure configuration of database connection details.
+* Regular backups where appropriate.
+
+Only the application and authorized administrators should have access to
+sensitive database information.
+
+9. Common Web Security Measures
+
+The application should make use of Django's built-in security protections, including:
+
+* CSRF protection for forms that modify data.
+* Password hashing.
+* Authentication and authorization.
+* Input validation.
+* Protection against unauthorized database access.
+* Secure handling of sessions and cookies.
+
+10. Authorization Principle
+
+The application will follow the principle of least privilege. Users should only 
+receive the permissions necessary to perform the tasks associated with their role.
+
+Access checks will be performed on the server side rather than relying only on 
+hiding buttons or links in the user interface.

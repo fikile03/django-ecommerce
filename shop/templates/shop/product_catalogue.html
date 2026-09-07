@@ -1,0 +1,137 @@
+{% extends "shop/base.html" %}
+
+{% block title %}Products | eCommerce Store{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="mb-1">Product Catalogue</h1>
+        <p class="text-muted mb-0">
+            Browse our available products.
+        </p>
+    </div>
+
+    <a href="{% url 'cart' %}" class="btn btn-outline-primary">
+        🛒 View Cart
+    </a>
+
+</div>
+
+{% if products %}
+
+<div class="row g-4">
+
+    {% for product in products %}
+
+    <div class="col-md-6 col-lg-4">
+
+        <div class="product-card">
+
+            <h2 class="h4">{{ product.name }}</h2>
+
+            <p class="text-muted mb-2">
+                Store: {{ product.store.name }}
+            </p>
+
+            <p>
+                {{ product.description }}
+            </p>
+
+            <p class="price text-primary">
+                R{{ product.price }}
+            </p>
+
+            <p>
+                {% if product.stock > 0 %}
+                <span class="badge bg-success">
+                    {{ product.stock }} in stock
+                </span>
+                {% else %}
+                <span class="badge bg-danger">
+                    Out of stock
+                </span>
+                {% endif %}
+            </p>
+
+
+            <div class="d-grid gap-2 mt-3">
+
+                {% if product.stock > 0 %}
+                <a href="{% url 'add_to_cart' product.id %}" class="btn btn-primary">
+                    🛒 Add to Cart
+                </a>
+                {% else %}
+                <button class="btn btn-secondary" disabled>
+                    Out of Stock
+                </button>
+                {% endif %}
+
+                <a href="{% url 'add_review' product.id %}" class="btn btn-outline-warning">
+                    ⭐ Leave a Review
+                </a>
+
+            </div>
+
+
+            {% for review in reviews %}
+
+            {% if review.product.id == product.id %}
+
+            <div class="review mt-4">
+
+                <strong>{{ review.user.username }}</strong>
+
+                <span class="text-warning">
+                    ★ {{ review.rating }}/5
+                </span>
+
+                <p class="mb-1 mt-2">
+                    {{ review.comment }}
+                </p>
+
+                {% if review.is_verified %}
+                <small class="text-success fw-bold">
+                    ✓ Verified Purchase
+                </small>
+                {% else %}
+                <small class="text-muted">
+                    Unverified Review
+                </small>
+                {% endif %}
+
+            </div>
+
+            {% endif %}
+
+            {% empty %}
+
+            <p class="text-muted mt-3">
+                No reviews yet.
+            </p>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+{% else %}
+
+<div class="alert alert-info">
+    No products are available at the moment.
+</div>
+
+{% endif %}
+
+<div class="mt-5">
+    <a href="{% url 'home' %}" class="btn btn-outline-secondary">
+        ← Back to Home
+    </a>
+</div>
+
+{% endblock %}

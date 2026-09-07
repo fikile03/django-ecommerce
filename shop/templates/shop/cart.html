@@ -1,0 +1,135 @@
+{% extends "shop/base.html" %}
+
+{% block title %}Shopping Cart | eCommerce Store{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="mb-1">Shopping Cart</h1>
+        <p class="text-muted mb-0">
+            Review your items before checkout.
+        </p>
+    </div>
+
+    <a href="{% url 'product_catalogue' %}" class="btn btn-outline-primary">
+        Continue Shopping
+    </a>
+
+
+</div>
+
+{% if cart_items %}
+
+<div class="row g-4">
+
+
+    <!-- Cart Items -->
+    <div class="col-lg-8">
+
+        {% for item in cart_items %}
+
+        <div class="cart-item">
+
+            <div class="d-flex justify-content-between align-items-start">
+
+                <div>
+                    <h2 class="h5 mb-2">
+                        {{ item.product.name }}
+                    </h2>
+
+                    <p class="text-muted mb-1">
+                        Price: R{{ item.product.price }}
+                    </p>
+
+                    <p class="mb-1">
+                        Quantity:
+                        <span class="badge bg-primary">
+                            {{ item.quantity }}
+                        </span>
+                    </p>
+
+                    <p class="fw-bold mb-0">
+                        Subtotal: R{{ item.subtotal }}
+                    </p>
+                </div>
+
+                <a href="{% url 'remove_from_cart' item.product.id %}" class="btn btn-outline-danger btn-sm">
+                    Remove
+                </a>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+
+    <!-- Order Summary -->
+    <div class="col-lg-4">
+
+        <div class="checkout-box">
+
+            <h2 class="h4 mb-4">
+                Order Summary
+            </h2>
+
+            <div class="d-flex justify-content-between mb-3">
+                <span>Items</span>
+                <span>{{ cart_items|length }}</span>
+            </div>
+
+            <hr>
+
+            <div class="d-flex justify-content-between mb-4">
+                <strong>Total</strong>
+                <strong class="text-primary">
+                    R{{ total }}
+                </strong>
+            </div>
+
+            {% if user.is_authenticated %}
+
+            <a href="{% url 'checkout' %}" class="btn btn-primary w-100">
+                Proceed to Checkout
+            </a>
+
+            {% else %}
+
+            <a href="{% url 'login' %}" class="btn btn-primary w-100">
+                Log In to Checkout
+            </a>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% else %}
+
+<div class="text-center py-5">
+
+    <div class="success-box">
+
+        <h2>Your cart is empty.</h2>
+
+        <p class="text-muted">
+            You haven't added any products yet.
+        </p>
+
+        <a href="{% url 'product_catalogue' %}" class="btn btn-primary">
+            Continue Shopping
+        </a>
+
+    </div>
+
+</div>
+
+{% endif %}
+
+{% endblock %}

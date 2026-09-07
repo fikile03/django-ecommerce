@@ -1,0 +1,103 @@
+{% extends "shop/base.html" %}
+
+{% block title %}Checkout | eCommerce Store{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+
+
+    <div class="col-lg-8">
+
+        <div class="checkout-box">
+
+            <div class="mb-4">
+                <h1>Checkout</h1>
+                <p class="text-muted">
+                    Review your order before placing it.
+                </p>
+            </div>
+
+
+            {% for item in cart_items %}
+
+            <div class="cart-item">
+
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <div>
+                        <h2 class="h5 mb-1">
+                            {{ item.product.name }}
+                        </h2>
+
+                        <p class="text-muted mb-1">
+                            R{{ item.product.price }} each
+                        </p>
+
+                        <p class="mb-0">
+                            Quantity:
+                            <span class="badge bg-primary">
+                                {{ item.quantity }}
+                            </span>
+                        </p>
+                    </div>
+
+                    <div class="text-end">
+                        <small class="text-muted">
+                            Subtotal
+                        </small>
+
+                        <div class="fw-bold">
+                            R{{ item.subtotal }}
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+
+            <hr class="my-4">
+
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+
+                <h2 class="h4 mb-0">
+                    Total
+                </h2>
+
+                <h2 class="h4 text-primary mb-0">
+                    R{{ total }}
+                </h2>
+
+            </div>
+
+
+            <form method="post">
+
+                {% csrf_token %}
+
+                <button type="submit" class="btn btn-success btn-lg w-100">
+                    ✓ Place Order
+                </button>
+
+            </form>
+
+
+            <div class="text-center mt-3">
+
+                <a href="{% url 'cart' %}" class="text-decoration-none">
+                    ← Back to Cart
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

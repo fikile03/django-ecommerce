@@ -1,0 +1,86 @@
+{% extends "shop/base.html" %}
+
+{% block title %}Vendor Dashboard | eCommerce Store{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold">Vendor Dashboard</h1>
+        <p class="text-muted">
+            Welcome, {{ user.username }}! Manage your stores and products below.
+        </p>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>My Stores</h2>
+
+        <a href="{% url 'create_store' %}" class="btn btn-success">
+            Create Store
+        </a>
+    </div>
+
+    {% if stores %}
+
+    <div class="row g-4">
+
+        {% for store in stores %}
+
+        <div class="col-md-6">
+            <div class="card h-100 shadow-sm">
+
+                <div class="card-body">
+
+                    <h3 class="card-title">
+                        {{ store.name }}
+                    </h3>
+
+                    <p class="card-text text-muted">
+                        {{ store.description }}
+                    </p>
+
+                    <div class="d-flex gap-2 flex-wrap">
+
+                        <a href="{% url 'product_list' store.id %}" class="btn btn-primary">
+                            Manage Products
+                        </a>
+
+                        <a href="{% url 'edit_store' store.id %}" class="btn btn-outline-secondary">
+                            Edit Store
+                        </a>
+
+                        <a href="{% url 'delete_store' store.id %}" class="btn btn-outline-danger">
+                            Delete Store
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    {% else %}
+
+    <div class="text-center py-5">
+        <h3>You don't have any stores yet.</h3>
+
+        <p class="text-muted">
+            Create your first store to start adding products.
+        </p>
+
+        <a href="{% url 'create_store' %}" class="btn btn-success">
+            Create Your First Store
+        </a>
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

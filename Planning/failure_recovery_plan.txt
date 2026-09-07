@@ -1,0 +1,119 @@
+eCommerce Application – Failure and Recovery Plan
+
+1. General Error Handling
+
+The application should handle unexpected behaviour without crashing or exposing 
+sensitive technical information to users.
+
+When an error occurs, the application should display a clear and understandable 
+message and allow the user to safely return to the relevant part of the application.
+
+2. Invalid User Input
+
+Users may enter incomplete, incorrect, or invalid information into forms.
+
+The application should:
+
+* Validate submitted information.
+* Display clear error messages.
+* Keep valid information entered by the user where possible.
+* Prevent invalid information from being saved to the database.
+
+For example, a product should not be created if required information such 
+as its name or price is missing.
+
+3. Authentication Failures
+
+If a user enters incorrect login details, the application should display an 
+appropriate error message without revealing which part of the credentials was incorrect.
+
+Users who forget their password should be able to use the password recovery process.
+
+4. Unauthorized Access
+
+If a user attempts to access a page or perform an action that they do not have 
+permission to use, the application should deny the request.
+
+For example:
+
+* A buyer attempting to access vendor management pages should be denied.
+* A vendor attempting to edit another vendor's products should be denied.
+* A logged-out user attempting to access checkout should be redirected to login or denied access.
+
+The application should not rely only on hiding unauthorized buttons from the interface.
+
+5. Product Availability
+
+A product may become unavailable or have insufficient stock before checkout.
+
+The system should check product availability when the buyer checks out.
+
+If a product is unavailable, the purchase should not be completed for that
+item and the buyer should receive a clear message explaining the problem.
+
+6. Shopping Cart Errors
+
+If an item in the session-based cart no longer exists or is no longer available, 
+the application should handle the situation without crashing.
+
+The invalid item should be removed or updated appropriately, and the buyer should be informed.
+
+The system should also ensure that the buyer cannot purchase more items than are available.
+
+7. Checkout Failure
+
+Checkout may fail because of invalid data, unavailable products, database problems, 
+or other unexpected errors.
+
+The application should:
+
+* Avoid creating an incomplete order.
+* Avoid removing items from the cart before the purchase is successfully recorded.
+* Inform the buyer that the checkout could not be completed.
+* Keep the cart available so that the buyer can try again where appropriate.
+
+8. Database Failure
+
+If the database becomes unavailable, the application should handle the error 
+gracefully rather than displaying technical database information to the user.
+
+Database operations should be performed safely to prevent incomplete or inconsistent records.
+
+Important operations such as checkout should use appropriate database transaction 
+handling so that related changes succeed together or are rolled back if a failure occurs.
+
+9. Email Failure
+
+An invoice or password-reset email may fail to send.
+
+The application should:
+
+* Detect email delivery errors where possible.
+* Avoid exposing technical email configuration details to the user.
+* Record the error for debugging or administration.
+* Ensure that an email failure does not unnecessarily corrupt the user's order data.
+
+The system should distinguish between successfully creating an order and 
+successfully delivering an email.
+
+10. Expired Password Reset Links
+
+Password-reset links should expire after a limited period.
+
+If a user attempts to use an expired or invalid reset link, the application 
+should reject the request and provide an option to request a new password-reset link.
+
+11. Missing Resources
+
+If a requested store, product, order, or review does not exist, the application should 
+display an appropriate not-found response rather than causing the application to crash.
+
+12. Recovery and Data Integrity
+
+The system should prioritise keeping data consistent when failures occur.
+
+For important operations such as checkout, database transactions should be used
+so that related operations are completed together or rolled back when an error occurs.
+
+Regular database backups should also be considered when the application is deployed
+in a production environment.

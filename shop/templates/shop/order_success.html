@@ -1,0 +1,47 @@
+{% extends "shop/base.html" %}
+
+{% block title %}Order Successful | eCommerce Store{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+
+    <div class="col-md-8 col-lg-6">
+
+        <div class="success-box">
+
+            <div class="display-3 mb-3">
+                ✓
+            </div>
+
+            <h1 class="text-success">
+                Order Placed Successfully!
+            </h1>
+
+            <p class="lead">
+                Thank you for your purchase.
+            </p>
+
+            <p class="text-muted">
+                Your order has been successfully placed.
+            </p>
+
+            <div class="d-grid gap-2 mt-4">
+
+                <a href="{% url 'product_catalogue' %}" class="btn btn-primary">
+                    Continue Shopping
+                </a>
+
+                <a href="{% url 'home' %}" class="btn btn-outline-secondary">
+                    Back to Home
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

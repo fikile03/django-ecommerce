@@ -1,0 +1,174 @@
+eCommerce Application – UI/Layout Plan
+
+1. General Layout
+
+The application will use a simple and consistent layout across the website.
+A navigation bar will be displayed at the top of the pages, with the available 
+options changing depending on whether the user is a buyer, vendor, or not 
+logged in.
+
+The interface will be designed to be clear and easy to navigate, with buttons 
+and links clearly labelled so that users can understand what each action does.
+
+2. Home Page
+
+The home page will provide an introduction to the eCommerce application 
+and allow users to begin browsing products.
+
+The page will include:
+
+* Application name and branding.
+* Navigation menu.
+* Login and registration options for users who are not logged in.
+* Product browsing option.
+* Store browsing option.
+* Cart access for logged-in buyers.
+
+3. Registration and Login Pages
+
+Registration
+
+The registration page will allow a new user to create an account.
+
+The user will provide the required account information and select whether 
+they want to register as a buyer or vendor.
+
+The page should provide clear validation messages when incorrect or incomplete 
+information is entered.
+
+Login
+
+The login page will allow registered users to enter their credentials.
+
+It will also provide:
+
+* A link to register for a new account.
+* A link to recover a forgotten password.
+* Clear error messages when login details are incorrect.
+
+4. Buyer Interface
+
+After logging in as a buyer, the navigation menu will provide access to buyer functionality.
+
+Product Listing
+
+The product page will display products from different stores.
+
+Each product should display relevant information such as:
+
+* Product name.
+* Price.
+* Store name.
+* Description.
+* Available quantity.
+* Option to view more details.
+
+Product Details
+
+The product details page will provide more information about a selected product.
+
+The buyer should be able to:
+
+* Add the product to their cart.
+* View existing reviews.
+* Leave a review.
+
+The page should indicate whether a review is verified or unverified.
+
+Shopping Cart
+
+The cart page will display:
+
+* Products currently in the cart.
+* Product quantities.
+* Prices.
+* Total cost.
+* Options to update quantities.
+* Options to remove products.
+* Checkout button.
+
+Checkout
+
+The checkout page will display a summary of the buyer's order before it is completed.
+
+After a successful checkout, the buyer will receive an invoice by email.
+
+5. Vendor Interface
+
+After logging in as a vendor, the navigation menu will provide access to vendor functionality.
+
+Store Management
+
+The vendor dashboard will allow the vendor to:
+
+* Create a store.
+* View their stores.
+* Edit store information.
+* Delete a store.
+
+Product Management
+
+The vendor should be able to manage products belonging to their stores.
+
+The product management interface will provide options to:
+
+* Add a product.
+* View products.
+* Edit products.
+* Delete products.
+
+6. Password Reset Interface
+
+The password recovery process will contain pages for:
+
+1. Requesting a password reset.
+2. Confirming the reset request.
+3. Entering a new password.
+4. Showing a success or error message.
+
+The user will receive a password-reset link through email.
+
+7. Error and Feedback Messages
+
+The interface should provide clear feedback when an action succeeds or fails.
+
+Examples include:
+
+* Successful registration message.
+* Invalid login details message.
+* Product successfully added to cart.
+* Product successfully removed from cart.
+* Successful checkout message.
+* Invalid or expired password-reset link.
+* Permission-denied message when a user attempts to access an unauthorized page.
+
+8. Navigation Structure
+
+The navigation options will depend on the user's role.
+
+Guest User
+
+* Home
+* Products
+* Stores
+* Register
+* Login
+
+Buyer
+
+* Home
+* Products
+* Stores
+* Cart
+* My Orders
+* Logout
+
+Vendor
+
+* Home
+* My Stores
+* My Products
+* Logout
+
+The navigation will be kept consistent across pages so that users can easily 
+move between different sections of the application.
