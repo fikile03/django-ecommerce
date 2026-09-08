@@ -10,6 +10,7 @@ from django.db import transaction
 
 from .forms import RegistrationForm, StoreForm, ProductForm, ReviewForm
 from .models import Store, Product, Order, OrderItem, Review
+from .decorators import vendor_required
 from .functions.jsonplaceholder import get_jsonplaceholder_posts
 
 
@@ -78,19 +79,12 @@ def home(request):
 
 
 @login_required
+@vendor_required
 def vendor_dashboard(request):
     """Display the dashboard for vendors and their stores."""
 
-    if not request.user.groups.filter(name="Vendor").exists():
-        return redirect("home")
-
     stores = Store.objects.filter(vendor=request.user)
-
-    return render(
-        request,
-        "shop/vendor_dashboard.html",
-        {"stores": stores},
-    )
+    return render(request, "shop/vendor_dashboard.html", {"stores": stores})
 
 
 @login_required
@@ -116,23 +110,18 @@ def create_store(request):
 
 
 @login_required
+@vendor_required
 def store_list(request):
     """Display all stores belonging to the logged-in vendor."""
 
-    if not request.user.groups.filter(name="Vendor").exists():
-        return redirect("home")
-
     stores = Store.objects.filter(vendor=request.user)
-
     return render(request, "shop/store_list.html", {"stores": stores})
 
 
 @login_required
+@vendor_required
 def edit_store(request, store_id):
     """Allow a vendor to edit one of their stores."""
-
-    if not request.user.groups.filter(name="Vendor").exists():
-        return redirect("home")
 
     store = get_object_or_404(Store, id=store_id)
 
@@ -152,11 +141,9 @@ def edit_store(request, store_id):
 
 
 @login_required
+@vendor_required
 def delete_store(request, store_id):
     """Allow a vendor to delete one of their stores."""
-
-    if not request.user.groups.filter(name="Vendor").exists():
-        return redirect("home")
 
     store = get_object_or_404(Store, id=store_id)
 
@@ -171,11 +158,9 @@ def delete_store(request, store_id):
 
 
 @login_required
+@vendor_required
 def create_product(request, store_id):
     """Allow a vendor to create a product for one of their stores."""
-
-    if not request.user.groups.filter(name="Vendor").exists():
-        return redirect("home")
 
     store = get_object_or_404(Store, id=store_id)
 
@@ -198,11 +183,9 @@ def create_product(request, store_id):
 
 
 @login_required
+@vendor_required
 def product_list(request, store_id):
     """Display all products belonging to a vendor's store."""
-
-    if not request.user.groups.filter(name="Vendor").exists():
-        return redirect("home")
 
     store = get_object_or_404(Store, id=store_id)
 
@@ -217,11 +200,9 @@ def product_list(request, store_id):
 
 
 @login_required
+@vendor_required
 def edit_product(request, product_id):
     """Allow a vendor to edit one of their products."""
-
-    if not request.user.groups.filter(name="Vendor").exists():
-        return redirect("home")
 
     product = get_object_or_404(Product, id=product_id)
 
@@ -241,13 +222,11 @@ def edit_product(request, product_id):
 
 
 @login_required
+@vendor_required
 def delete_product(request, product_id):
     """Allow a vendor to delete one of their products."""
 
-    if not request.user.groups.filter(name="Vendor").exists():
-        return redirect("home")
-
-    product = Product.objects.get(id=product_id)
+    product = get_object_or_404(Product, id=product_id)
 
     if product.store.vendor != request.user:
         return redirect("store_list")
