@@ -244,6 +244,7 @@ def product_catalogue(request):
 
     search_query = request.GET.get("q", "").strip()
     store_id = request.GET.get("store", "").strip()
+    sort = request.GET.get("sort", "").strip()
 
     products = Product.objects.select_related("store").all()
 
@@ -255,6 +256,17 @@ def product_catalogue(request):
 
     if store_id:
         products = products.filter(store_id=store_id)
+
+    if sort == "name_asc":
+        products = products.order_by("name")
+    elif sort == "name_desc":
+        products = products.order_by("-name")
+    elif sort == "price_asc":
+        products = products.order_by("price")
+    elif sort == "price_desc":
+        products = products.order_by("-price")
+    elif sort == "newest":
+        products = products.order_by("-created_at")
 
     stores = Store.objects.all().order_by("name")
 
@@ -271,6 +283,7 @@ def product_catalogue(request):
             "reviews": reviews,
             "search_query": search_query,
             "store_id": store_id,
+            "sort": sort,
             "stores": stores,
         },
     )

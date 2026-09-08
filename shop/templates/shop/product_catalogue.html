@@ -22,7 +22,7 @@
 
     <div class="row g-2">
 
-        <div class="col-md-7">
+        <div class="col-md-5">
             <input type="text" name="q" value="{{ search_query }}" class="form-control"
                 placeholder="Search products...">
         </div>
@@ -40,7 +40,33 @@
             </select>
         </div>
 
-        <div class="col-md-2 d-grid">
+        <div class="col-md-3">
+            <select name="sort" class="form-select">
+                <option value="" {% if not sort %}selected{% endif %}>Sort by</option>
+
+                <option value="name_asc" {% if sort == "name_asc" %}selected{% endif %}>
+                    Name: A → Z
+                </option>
+
+                <option value="name_desc" {% if sort == "name_desc" %}selected{% endif %}>
+                    Name: Z → A
+                </option>
+
+                <option value="price_asc" {% if sort == "price_asc" %}selected{% endif %}>
+                    Price: Low → High
+                </option>
+
+                <option value="price_desc" {% if sort == "price_desc" %}selected{% endif %}>
+                    Price: High → Low
+                </option>
+
+                <option value="newest" {% if sort == "newest" %}selected{% endif %}>
+                    Newest first
+                </option>
+            </select>
+        </div>
+
+        <div class="col-md-1 d-grid">
             <button type="submit" class="btn btn-primary">
                 🔎 Search
             </button>
