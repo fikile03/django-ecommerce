@@ -18,6 +18,22 @@
 
 </div>
 
+<form method="get" class="mb-4">
+    <div class="input-group">
+        <input type="text" name="q" value="{{ search_query }}" class="form-control" placeholder="Search products...">
+
+        <button type="submit" class="btn btn-primary">
+            🔎 Search
+        </button>
+
+        {% if search_query %}
+        <a href="{% url 'product_catalogue' %}" class="btn btn-outline-secondary">
+            Clear
+        </a>
+        {% endif %}
+    </div>
+</form>
+
 {% if products %}
 
 <div class="row g-4">

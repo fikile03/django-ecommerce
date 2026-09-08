@@ -6,7 +6,7 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import get_object_or_404, redirect, render
 from django.core.mail import EmailMessage
-from django.db import transaction
+from django.db import models, transaction
 
 from .forms import RegistrationForm, StoreForm, ProductForm, ReviewForm
 from .models import Store, Product, Order, OrderItem, Review
@@ -242,7 +242,16 @@ def delete_product(request, product_id):
 def product_catalogue(request):
     """Display all products and their associated reviews."""
 
+    search_query = request.GET.get("q", "").strip()
+
     products = Product.objects.select_related("store").all()
+
+    if search_query:
+        products = products.filter(
+            models.Q(name__icontains=search_query)
+            | models.Q(description__icontains=search_query)
+        )
+
     reviews = Review.objects.select_related("user", "product").all()
 
     return render(
@@ -251,6 +260,7 @@ def product_catalogue(request):
         {
             "products": products,
             "reviews": reviews,
+            "search_query": search_query,
         },
     )
 
