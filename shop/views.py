@@ -442,8 +442,6 @@ def order_detail(request, order_id):
 def checkout(request):
     """Process the user's shopping cart and create a new order."""
 
-    print("CHECKOUT VIEW CALLED:", request.method)
-
     cart = request.session.get("cart", {})
 
     if not cart:
@@ -458,8 +456,6 @@ def checkout(request):
         total += product.price * quantity
 
     if request.method == "POST":
-        print("CHECKOUT POST REACHED")
-
         for product in products:
             quantity = cart[str(product.id)]
 
@@ -500,29 +496,12 @@ def checkout(request):
             to=[request.user.email],
         )
 
-        result = email.send()
-
-        print("EMAIL SEND RESULT:", result)
+        email.send()
 
         request.session["cart"] = {}
 
         return redirect("order_success")
 
-    return render(
-        request,
-        "shop/checkout.html",
-        {
-            "cart_items": [
-                {
-                    "product": product,
-                    "quantity": cart[str(product.id)],
-                    "subtotal": product.price * cart[str(product.id)],
-                }
-                for product in products
-            ],
-            "total": total,
-        },
-    )
     return render(
         request,
         "shop/checkout.html",
