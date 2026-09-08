@@ -7,6 +7,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import get_object_or_404, redirect, render
 from django.core.mail import EmailMessage
 from django.db import models, transaction
+from django.core.paginator import Paginator
 
 from .forms import RegistrationForm, StoreForm, ProductForm, ReviewForm
 from .models import Store, Product, Order, OrderItem, Review
@@ -268,6 +269,10 @@ def product_catalogue(request):
     elif sort == "newest":
         products = products.order_by("-created_at")
 
+    paginator = Paginator(products, 6)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
     stores = Store.objects.all().order_by("name")
 
     for store in stores:
@@ -279,7 +284,7 @@ def product_catalogue(request):
         request,
         "shop/product_catalogue.html",
         {
-            "products": products,
+            "products": page_obj,
             "reviews": reviews,
             "search_query": search_query,
             "store_id": store_id,
