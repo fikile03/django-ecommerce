@@ -264,10 +264,16 @@ def cart(request):
 
     valid_product_ids = {str(product.id) for product in products}
 
+    for product in products:
+        product_id = str(product.id)
+
+        if product_id in cart:
+            cart[product_id] = min(cart[product_id], product.stock)
+
     cart = {
         product_id: quantity
         for product_id, quantity in cart.items()
-        if product_id in valid_product_ids
+        if product_id in valid_product_ids and quantity > 0
     }
 
     request.session["cart"] = cart
@@ -276,7 +282,12 @@ def cart(request):
     cart_items = []
 
     for product in products:
-        quantity = cart[str(product.id)]
+        product_id = str(product.id)
+
+        if product_id not in cart:
+            continue
+
+        quantity = cart[product_id]
         subtotal = product.price * quantity
 
         cart_items.append(
@@ -334,6 +345,23 @@ def remove_from_cart(request, product_id):
     request.session["cart"] = cart
     request.session.modified = True
 
+    return redirect("cart")
+
+
+def decrease_cart_quantity(request, product_id):
+    """Decrease the quantity of a product in the shopping cart by one."""
+
+    cart = request.session.get("cart", {})
+    product_id = str(product_id)
+
+    if product_id in cart:
+        if cart[product_id] > 1:
+            cart[product_id] -= 1
+        else:
+            del cart[product_id]
+
+    request.session["cart"] = cart
+    request.session.modified = True
     return redirect("cart")
 
 

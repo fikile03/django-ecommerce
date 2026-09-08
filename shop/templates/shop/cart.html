@@ -44,9 +44,19 @@
 
                     <p class="mb-1">
                         Quantity:
+
+                        <a href="{% url 'decrease_cart_quantity' item.product.id %}"
+                            class="btn btn-outline-secondary btn-sm">
+                            −
+                        </a>
+
                         <span class="badge bg-primary">
                             {{ item.quantity }}
                         </span>
+
+                        <a href="{% url 'add_to_cart' item.product.id %}" class="btn btn-outline-primary btn-sm">
+                            +
+                        </a>
                     </p>
 
                     <p class="fw-bold mb-0">
