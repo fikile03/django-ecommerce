@@ -38,6 +38,8 @@ urlpatterns = [
     path("order/<int:order_id>/", views.order_detail, name="order_detail"),
     path("order-success/", views.order_success, name="order_success"),
     path("review/<int:product_id>/", views.add_review, name="add_review"),
+    path("review/<int:review_id>/edit/", views.edit_review, name="edit_review"),
+    path("review/<int:review_id>/delete/", views.delete_review, name="delete_review"),
     path(
         "password_reset/",
         auth_views.PasswordResetView.as_view(

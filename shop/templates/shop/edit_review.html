@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Edit Review</title>
+</head>
+
+<body>
+
+    <h1>Edit Review for {{ review.product.name }}</h1>
+
+    <form method="post">
+        {% csrf_token %}
+
+        {{ form.non_field_errors }}
+
+        <label for="id_rating">Rating:</label>
+        {{ form.rating }}
+
+        {% for error in form.rating.errors %}
+        <p>{{ error }}</p>
+        {% endfor %}
+
+        <br><br>
+
+        <label for="id_comment">Comment:</label>
+        <br>
+        {{ form.comment }}
+
+        {% for error in form.comment.errors %}
+        <p>{{ error }}</p>
+        {% endfor %}
+
+        <br><br>
+
+        <button type="submit">Save Changes</button>
+    </form>
+
+    <p>
+        <a href="{% url 'product_catalogue' %}">Cancel</a>
+    </p>
+
+</body>
+
+</html>

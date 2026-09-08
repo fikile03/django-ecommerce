@@ -578,6 +578,53 @@ def add_review(request, product_id):
     )
 
 
+@login_required
+def edit_review(request, review_id):
+    """Allow a user to edit their own review."""
+
+    review = get_object_or_404(
+        Review,
+        id=review_id,
+        user=request.user,
+    )
+
+    if request.method == "POST":
+        form = ReviewForm(request.POST, instance=review)
+
+        if form.is_valid():
+            form.save()
+            return redirect("product_catalogue")
+    else:
+        form = ReviewForm(instance=review)
+
+    return render(
+        request,
+        "shop/edit_review.html",
+        {"review": review, "form": form},
+    )
+
+
+@login_required
+def delete_review(request, review_id):
+    """Allow a user to delete their own review."""
+
+    review = get_object_or_404(
+        Review,
+        id=review_id,
+        user=request.user,
+    )
+
+    if request.method == "POST":
+        review.delete()
+        return redirect("product_catalogue")
+
+    return render(
+        request,
+        "shop/delete_review.html",
+        {"review": review},
+    )
+
+
 def external_posts(request):
     """Fetch posts from JSONPlaceholder and display them."""
 
