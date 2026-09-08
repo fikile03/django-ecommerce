@@ -243,6 +243,7 @@ def product_catalogue(request):
     """Display all products and their associated reviews."""
 
     search_query = request.GET.get("q", "").strip()
+    store_id = request.GET.get("store", "").strip()
 
     products = Product.objects.select_related("store").all()
 
@@ -251,6 +252,14 @@ def product_catalogue(request):
             models.Q(name__icontains=search_query)
             | models.Q(description__icontains=search_query)
         )
+
+    if store_id:
+        products = products.filter(store_id=store_id)
+
+    stores = Store.objects.all().order_by("name")
+
+    for store in stores:
+        store.is_selected = str(store.id) == store_id
 
     reviews = Review.objects.select_related("user", "product").all()
 
@@ -261,6 +270,8 @@ def product_catalogue(request):
             "products": products,
             "reviews": reviews,
             "search_query": search_query,
+            "store_id": store_id,
+            "stores": stores,
         },
     )
 

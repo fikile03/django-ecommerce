@@ -19,19 +19,43 @@
 </div>
 
 <form method="get" class="mb-4">
-    <div class="input-group">
-        <input type="text" name="q" value="{{ search_query }}" class="form-control" placeholder="Search products...">
 
-        <button type="submit" class="btn btn-primary">
-            🔎 Search
-        </button>
+    <div class="row g-2">
 
-        {% if search_query %}
-        <a href="{% url 'product_catalogue' %}" class="btn btn-outline-secondary">
-            Clear
-        </a>
-        {% endif %}
+        <div class="col-md-7">
+            <input type="text" name="q" value="{{ search_query }}" class="form-control"
+                placeholder="Search products...">
+        </div>
+
+        <div class="col-md-3">
+            <select name="store" class="form-select">
+                <option value="">All Stores</option>
+
+                {% for store in stores %}
+                <option value="{{ store.id }}" {% if store.is_selected %}selected{% endif %}>
+                    {{ store.name }}
+                </option>
+                {% endfor %}
+
+            </select>
+        </div>
+
+        <div class="col-md-2 d-grid">
+            <button type="submit" class="btn btn-primary">
+                🔎 Search
+            </button>
+        </div>
+
     </div>
+
+    {% if search_query or store_id %}
+    <div class="mt-2">
+        <a href="{% url 'product_catalogue' %}" class="btn btn-outline-secondary btn-sm">
+            Clear Filters
+        </a>
+    </div>
+    {% endif %}
+
 </form>
 
 {% if products %}
