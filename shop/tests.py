@@ -509,3 +509,14 @@ class ProductCatalogueTests(TestCase):
         self.assertContains(response, "Quantity: 2")
         self.assertContains(response, "Price: R350")
         self.assertContains(response, "Total: R700")
+
+    def test_unauthenticated_user_cannot_access_checkout(self):
+        response = self.client.get(
+            reverse("checkout"),
+        )
+
+        self.assertEqual(response.status_code, 302)
+        self.assertIn(
+            reverse("login"),
+            response.url,
+        )
