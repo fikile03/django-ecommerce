@@ -470,3 +470,42 @@ class ProductCatalogueTests(TestCase):
         )
 
         self.assertRedirects(response, reverse("home"))
+
+    def test_user_can_view_own_order(self):
+        buyer = User.objects.create_user(
+            username="own_order_buyer",
+            password="StrongPassword123!",
+        )
+
+        product = Product.objects.create(
+            store=self.store,
+            name="Order Detail Product",
+            description="A product for order detail testing",
+            price=350,
+            stock=10,
+        )
+
+        order = Order.objects.create(
+            buyer=buyer,
+            total_amount=700,
+        )
+
+        OrderItem.objects.create(
+            order=order,
+            product=product,
+            quantity=2,
+            price=350,
+        )
+
+        self.client.force_login(buyer)
+
+        response = self.client.get(
+            reverse("order_detail", args=[order.id]),
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, f"Order #{order.id}")
+        self.assertContains(response, "Order Detail Product")
+        self.assertContains(response, "Quantity: 2")
+        self.assertContains(response, "Price: R350")
+        self.assertContains(response, "Total: R700")
