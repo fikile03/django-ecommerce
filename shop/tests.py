@@ -2,7 +2,7 @@ from django.contrib.auth.models import Group, User
 from django.test import TestCase
 from django.urls import reverse
 
-from .models import Product, Store
+from .models import Product, Review, Store
 
 
 class RegistrationTests(TestCase):
@@ -201,3 +201,32 @@ class ProductCatalogueTests(TestCase):
         self.assertRedirects(response, reverse("store_list"))
 
         self.assertTrue(Product.objects.filter(id=product.id).exists())
+
+    def test_logged_in_user_can_submit_unverified_review(self):
+        buyer = User.objects.create_user(
+            username="review_buyer",
+            password="StrongPassword123!",
+        )
+
+        product = Product.objects.get(name="Classic Denim Jacket")
+
+        self.client.force_login(buyer)
+
+        response = self.client.post(
+            reverse("add_review", args=[product.id]),
+            {
+                "rating": "5",
+                "comment": "Great jacket!",
+            },
+        )
+
+        self.assertRedirects(response, reverse("product_catalogue"))
+
+        review = Review.objects.get(
+            product=product,
+            user=buyer,
+        )
+
+        self.assertEqual(review.rating, 5)
+        self.assertEqual(review.comment, "Great jacket!")
+        self.assertFalse(review.is_verified)
