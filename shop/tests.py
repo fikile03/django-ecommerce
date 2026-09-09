@@ -230,3 +230,42 @@ class ProductCatalogueTests(TestCase):
         self.assertEqual(review.rating, 5)
         self.assertEqual(review.comment, "Great jacket!")
         self.assertFalse(review.is_verified)
+
+    def test_user_cannot_edit_another_users_review(self):
+        reviewer = User.objects.create_user(
+            username="reviewer",
+            password="StrongPassword123!",
+        )
+
+        other_user = User.objects.create_user(
+            username="other_user",
+            password="StrongPassword123!",
+        )
+
+        product = Product.objects.get(name="Classic Denim Jacket")
+
+        review = Review.objects.create(
+            product=product,
+            user=reviewer,
+            rating=4,
+            comment="Original review",
+            is_verified=False,
+        )
+
+        self.client.force_login(other_user)
+
+        response = self.client.post(
+            reverse("edit_review", args=[review.id]),
+            {
+                "rating": "1",
+                "comment": "I changed this review!",
+            },
+        )
+
+        self.assertEqual(response.status_code, 404)
+
+        review.refresh_from_db()
+
+        self.assertEqual(review.rating, 4)
+        self.assertEqual(review.comment, "Original review")
+        self.assertEqual(review.user, reviewer)
