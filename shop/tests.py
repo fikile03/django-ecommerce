@@ -2,7 +2,7 @@ from django.contrib.auth.models import Group, User
 from django.test import TestCase
 from django.urls import reverse
 
-from .models import Order, Product, Review, Store
+from .models import Order, OrderItem, Product, Review, Store
 
 
 class RegistrationTests(TestCase):
@@ -367,3 +367,51 @@ class ProductCatalogueTests(TestCase):
         product.refresh_from_db()
 
         self.assertEqual(product.stock, 2)
+
+    def test_checkout_creates_order_and_updates_stock(self):
+        buyer = User.objects.create_user(
+            username="successful_buyer",
+            email="buyer@example.com",
+            password="StrongPassword123!",
+        )
+
+        product = Product.objects.create(
+            store=self.store,
+            name="Checkout Product",
+            description="A product for checkout testing",
+            price=400,
+            stock=5,
+        )
+
+        self.client.force_login(buyer)
+
+        session = self.client.session
+        session["cart"] = {
+            str(product.id): 2,
+        }
+        session.save()
+
+        response = self.client.post(
+            reverse("checkout"),
+        )
+
+        self.assertRedirects(response, reverse("order_success"))
+
+        order = Order.objects.get(buyer=buyer)
+
+        self.assertEqual(order.total_amount, 800)
+        self.assertEqual(order.status, "Pending")
+
+        order_item = OrderItem.objects.get(order=order)
+
+        self.assertEqual(order_item.product, product)
+        self.assertEqual(order_item.quantity, 2)
+        self.assertEqual(order_item.price, 400)
+
+        product.refresh_from_db()
+
+        self.assertEqual(product.stock, 3)
+
+        cart = self.client.session.get("cart", {})
+
+        self.assertEqual(cart, {})
