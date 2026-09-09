@@ -2,7 +2,7 @@ from django.contrib.auth.models import Group, User
 from django.test import TestCase
 from django.urls import reverse
 
-from .models import Product, Review, Store
+from .models import Order, Product, Review, Store
 
 
 class RegistrationTests(TestCase):
@@ -332,3 +332,38 @@ class ProductCatalogueTests(TestCase):
         cart = self.client.session.get("cart", {})
 
         self.assertNotIn(str(product.id), cart)
+
+    def test_checkout_rejects_insufficient_stock(self):
+        buyer = User.objects.create_user(
+            username="checkout_buyer",
+            email="buyer@example.com",
+            password="StrongPassword123!",
+        )
+
+        product = Product.objects.create(
+            store=self.store,
+            name="Limited Checkout Product",
+            description="Only two available",
+            price=400,
+            stock=2,
+        )
+
+        self.client.force_login(buyer)
+
+        session = self.client.session
+        session["cart"] = {
+            str(product.id): 3,
+        }
+        session.save()
+
+        response = self.client.post(
+            reverse("checkout"),
+        )
+
+        self.assertRedirects(response, reverse("cart"))
+
+        self.assertFalse(Order.objects.filter(buyer=buyer).exists())
+
+        product.refresh_from_db()
+
+        self.assertEqual(product.stock, 2)
