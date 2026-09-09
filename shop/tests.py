@@ -269,3 +269,34 @@ class ProductCatalogueTests(TestCase):
         self.assertEqual(review.rating, 4)
         self.assertEqual(review.comment, "Original review")
         self.assertEqual(review.user, reviewer)
+
+    def test_user_cannot_delete_another_users_review(self):
+        reviewer = User.objects.create_user(
+            username="delete_reviewer",
+            password="StrongPassword123!",
+        )
+
+        other_user = User.objects.create_user(
+            username="delete_other_user",
+            password="StrongPassword123!",
+        )
+
+        product = Product.objects.get(name="Classic Denim Jacket")
+
+        review = Review.objects.create(
+            product=product,
+            user=reviewer,
+            rating=4,
+            comment="Original review",
+            is_verified=False,
+        )
+
+        self.client.force_login(other_user)
+
+        response = self.client.post(
+            reverse("delete_review", args=[review.id]),
+        )
+
+        self.assertEqual(response.status_code, 404)
+
+        self.assertTrue(Review.objects.filter(id=review.id).exists())
