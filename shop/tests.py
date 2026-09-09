@@ -174,3 +174,30 @@ class ProductCatalogueTests(TestCase):
         self.assertEqual(product.description, "Original description")
         self.assertEqual(product.price, 500)
         self.assertEqual(product.stock, 10)
+
+    def test_vendor_cannot_delete_another_vendors_product(self):
+        other_vendor = User.objects.create_user(
+            username="delete_vendor",
+            password="StrongPassword123!",
+        )
+
+        vendor_group = Group.objects.get(name="Vendor")
+        other_vendor.groups.add(vendor_group)
+
+        product = Product.objects.create(
+            store=self.store,
+            name="Protected Product",
+            description="This product should not be deleted",
+            price=750,
+            stock=5,
+        )
+
+        self.client.force_login(other_vendor)
+
+        response = self.client.post(
+            reverse("delete_product", args=[product.id]),
+        )
+
+        self.assertRedirects(response, reverse("store_list"))
+
+        self.assertTrue(Product.objects.filter(id=product.id).exists())
