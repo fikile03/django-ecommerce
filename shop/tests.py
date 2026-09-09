@@ -531,3 +531,14 @@ class ProductCatalogueTests(TestCase):
             reverse("login"),
             response.url,
         )
+
+    def test_unauthenticated_user_cannot_access_order_detail(self):
+        response = self.client.get(
+            reverse("order_detail", args=[1]),
+        )
+
+        self.assertEqual(response.status_code, 302)
+        self.assertIn(
+            reverse("login"),
+            response.url,
+        )
