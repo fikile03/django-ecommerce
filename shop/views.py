@@ -260,6 +260,8 @@ def product_catalogue(request):
         )
     )
 
+    products = products.order_by("-created_at")
+
     if search_query:
         products = products.filter(
             models.Q(name__icontains=search_query)
