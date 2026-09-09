@@ -90,11 +90,9 @@ def vendor_dashboard(request):
 
 
 @login_required
+@vendor_required
 def create_store(request):
     """Allow a vendor to create a new store."""
-
-    if not request.user.groups.filter(name="Vendor").exists():
-        return redirect("home")
 
     if request.method == "POST":
         form = StoreForm(request.POST)
