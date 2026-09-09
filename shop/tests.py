@@ -415,3 +415,34 @@ class ProductCatalogueTests(TestCase):
         cart = self.client.session.get("cart", {})
 
         self.assertEqual(cart, {})
+
+    def test_order_history_only_shows_users_own_orders(self):
+        buyer_one = User.objects.create_user(
+            username="history_buyer_one",
+            password="StrongPassword123!",
+        )
+
+        buyer_two = User.objects.create_user(
+            username="history_buyer_two",
+            password="StrongPassword123!",
+        )
+
+        order_one = Order.objects.create(
+            buyer=buyer_one,
+            total_amount=500,
+        )
+
+        order_two = Order.objects.create(
+            buyer=buyer_two,
+            total_amount=900,
+        )
+
+        self.client.force_login(buyer_one)
+
+        response = self.client.get(
+            reverse("order_history"),
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, f"Order #{order_one.id}")
+        self.assertNotContains(response, f"Order #{order_two.id}")
