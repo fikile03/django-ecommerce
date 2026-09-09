@@ -136,3 +136,41 @@ class ProductCatalogueTests(TestCase):
         self.assertEqual(product.store, self.store)
         self.assertEqual(product.price, 899)
         self.assertEqual(product.stock, 20)
+
+    def test_vendor_cannot_edit_another_vendors_product(self):
+        other_vendor = User.objects.create_user(
+            username="other_vendor",
+            password="StrongPassword123!",
+        )
+
+        vendor_group = Group.objects.get(name="Vendor")
+        other_vendor.groups.add(vendor_group)
+
+        product = Product.objects.create(
+            store=self.store,
+            name="Original Product",
+            description="Original description",
+            price=500,
+            stock=10,
+        )
+
+        self.client.force_login(other_vendor)
+
+        response = self.client.post(
+            reverse("edit_product", args=[product.id]),
+            {
+                "name": "Changed Product",
+                "description": "Changed description",
+                "price": 100,
+                "stock": 1,
+            },
+        )
+
+        self.assertRedirects(response, reverse("store_list"))
+
+        product.refresh_from_db()
+
+        self.assertEqual(product.name, "Original Product")
+        self.assertEqual(product.description, "Original description")
+        self.assertEqual(product.price, 500)
+        self.assertEqual(product.stock, 10)
