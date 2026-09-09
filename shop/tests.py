@@ -300,3 +300,20 @@ class ProductCatalogueTests(TestCase):
         self.assertEqual(response.status_code, 404)
 
         self.assertTrue(Review.objects.filter(id=review.id).exists())
+
+    def test_cart_cannot_exceed_product_stock(self):
+        product = Product.objects.create(
+            store=self.store,
+            name="Limited Stock Product",
+            description="Only two available",
+            price=300,
+            stock=2,
+        )
+
+        self.client.get(reverse("add_to_cart", args=[product.id]))
+        self.client.get(reverse("add_to_cart", args=[product.id]))
+        self.client.get(reverse("add_to_cart", args=[product.id]))
+
+        cart = self.client.session.get("cart", {})
+
+        self.assertEqual(cart[str(product.id)], 2)
