@@ -446,3 +446,27 @@ class ProductCatalogueTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, f"Order #{order_one.id}")
         self.assertNotContains(response, f"Order #{order_two.id}")
+
+    def test_user_cannot_view_another_users_order(self):
+        buyer_one = User.objects.create_user(
+            username="detail_buyer_one",
+            password="StrongPassword123!",
+        )
+
+        buyer_two = User.objects.create_user(
+            username="detail_buyer_two",
+            password="StrongPassword123!",
+        )
+
+        order = Order.objects.create(
+            buyer=buyer_one,
+            total_amount=600,
+        )
+
+        self.client.force_login(buyer_two)
+
+        response = self.client.get(
+            reverse("order_detail", args=[order.id]),
+        )
+
+        self.assertRedirects(response, reverse("home"))
