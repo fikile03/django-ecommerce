@@ -317,3 +317,18 @@ class ProductCatalogueTests(TestCase):
         cart = self.client.session.get("cart", {})
 
         self.assertEqual(cart[str(product.id)], 2)
+
+    def test_out_of_stock_product_cannot_be_added_to_cart(self):
+        product = Product.objects.create(
+            store=self.store,
+            name="Out of Stock Product",
+            description="This product is unavailable",
+            price=250,
+            stock=0,
+        )
+
+        self.client.get(reverse("add_to_cart", args=[product.id]))
+
+        cart = self.client.session.get("cart", {})
+
+        self.assertNotIn(str(product.id), cart)
