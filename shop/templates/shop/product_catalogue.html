@@ -140,9 +140,7 @@
             </div>
 
 
-            {% for review in reviews %}
-
-            {% if review.product.id == product.id %}
+            {% for review in product.page_reviews %}
 
             <div class="review mt-4">
 
@@ -175,8 +173,6 @@
                 {% endif %}
 
             </div>
-
-            {% endif %}
 
             {% empty %}
 

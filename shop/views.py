@@ -7,6 +7,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import get_object_or_404, redirect, render
 from django.core.mail import EmailMessage
 from django.db import models, transaction
+from django.db.models import Prefetch
 from django.core.paginator import Paginator
 
 from .forms import RegistrationForm, StoreForm, ProductForm, ReviewForm
@@ -247,7 +248,13 @@ def product_catalogue(request):
     store_id = request.GET.get("store", "").strip()
     sort = request.GET.get("sort", "").strip()
 
-    products = Product.objects.select_related("store").all()
+    products = Product.objects.select_related("store").prefetch_related(
+        Prefetch(
+            "review_set",
+            queryset=Review.objects.select_related("user"),
+            to_attr="page_reviews",
+        )
+    )
 
     if search_query:
         products = products.filter(
@@ -278,14 +285,11 @@ def product_catalogue(request):
     for store in stores:
         store.is_selected = str(store.id) == store_id
 
-    reviews = Review.objects.select_related("user", "product").all()
-
     return render(
         request,
         "shop/product_catalogue.html",
         {
             "products": page_obj,
-            "reviews": reviews,
             "search_query": search_query,
             "store_id": store_id,
             "sort": sort,
