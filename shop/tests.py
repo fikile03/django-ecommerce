@@ -520,3 +520,14 @@ class ProductCatalogueTests(TestCase):
             reverse("login"),
             response.url,
         )
+
+    def test_unauthenticated_user_cannot_access_order_history(self):
+        response = self.client.get(
+            reverse("order_history"),
+        )
+
+        self.assertEqual(response.status_code, 302)
+        self.assertIn(
+            reverse("login"),
+            response.url,
+        )
