@@ -542,3 +542,23 @@ class ProductCatalogueTests(TestCase):
             reverse("login"),
             response.url,
         )
+
+    def test_product_form_rejects_invalid_data(self):
+        self.client.force_login(self.vendor)
+
+        response = self.client.post(
+            reverse("create_product", args=[self.store.id]),
+            {
+                "name": "   ",
+                "description": "",
+                "price": -100,
+                "stock": -5,
+            },
+        )
+
+        self.assertEqual(response.status_code, 200)
+
+        self.assertContains(
+            response,
+            "This field is required.",
+        )
