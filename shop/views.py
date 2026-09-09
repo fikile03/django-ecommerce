@@ -206,7 +206,10 @@ def product_list(request, store_id):
 def edit_product(request, product_id):
     """Allow a vendor to edit one of their products."""
 
-    product = get_object_or_404(Product, id=product_id)
+    product = get_object_or_404(
+        Product.objects.select_related("store__vendor"),
+        id=product_id,
+    )
 
     if product.store.vendor != request.user:
         return redirect("store_list")
@@ -228,7 +231,10 @@ def edit_product(request, product_id):
 def delete_product(request, product_id):
     """Allow a vendor to delete one of their products."""
 
-    product = get_object_or_404(Product, id=product_id)
+    product = get_object_or_404(
+        Product.objects.select_related("store__vendor"),
+        id=product_id,
+    )
 
     if product.store.vendor != request.user:
         return redirect("store_list")
