@@ -78,6 +78,9 @@ class ProductCatalogueTests(TestCase):
             password="StrongPassword123!",
         )
 
+        vendor_group = Group.objects.get(name="Vendor")
+        self.vendor.groups.add(vendor_group)
+
         self.store = Store.objects.create(
             vendor=self.vendor,
             name="Test Store",
@@ -109,3 +112,27 @@ class ProductCatalogueTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Classic Denim Jacket")
         self.assertNotContains(response, "Hydrating Face Cream")
+
+    def test_vendor_can_create_product(self):
+        self.client.force_login(self.vendor)
+
+        response = self.client.post(
+            reverse("create_product", args=[self.store.id]),
+            {
+                "name": "Wireless Headphones",
+                "description": "Bluetooth wireless headphones",
+                "price": 899,
+                "stock": 20,
+            },
+        )
+
+        self.assertRedirects(
+            response,
+            reverse("product_list", args=[self.store.id]),
+        )
+
+        product = Product.objects.get(name="Wireless Headphones")
+
+        self.assertEqual(product.store, self.store)
+        self.assertEqual(product.price, 899)
+        self.assertEqual(product.stock, 20)
